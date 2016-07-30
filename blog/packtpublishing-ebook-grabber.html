@@ -13,13 +13,13 @@
 <link rel="canonical" href="../blog/packtpublishing-ebook-grabber.html">
 
         <meta name="author" content="lukasz uszko" />
-        <meta name="description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing Łukasz" />
+        <meta name="description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. What is it for? Packt Publishing offers its customers a free ebook everyday. To claim the book, first you have ..." />
 
         <meta property="og:site_name" content="Lukasz makes stuff" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="PacktPublishing eBook grabber"/>
         <meta property="og:url" content="../blog/packtpublishing-ebook-grabber.html"/>
-        <meta property="og:description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing Łukasz"/>
+        <meta property="og:description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. What is it for? Packt Publishing offers its customers a free ebook everyday. To claim the book, first you have ..."/>
         <meta property="article:published_time" content="2016-07-20" />
             <meta property="article:section" content="Web, Python" />
             <meta property="article:author" content="lukasz uszko" />
@@ -107,8 +107,44 @@ Lukasz makes stuff            </a>
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <p>Hello reader!</p>
-<p>Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing </p>
-<p>Łukasz</p>
+<p>Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. </p>
+<h3 id="what-is-it-for"><font color=#669900><em>What is it for?</em></font></h3>
+<p><a href="https://www.packtpub.com">Packt Publishing</a> offers its customers a free ebook everyday. 
+To claim the book, first you have to create a personal packtpub account <a href="https://www.packtpub.com/register">here</a>. After this you can claim everyday a new IT technical ebook from <a href="https://www.packtpub.com/packt/offers/free-learning">here</a>. It requires to repeat many manual steps in order to claim and then download an ebook. Of course it takes time and it will probably cause you miss a valuable position finally. That's why i created a simple 2 scripts, that automatically claim and download a daily free eBook in chosen format/s.</p>
+<h3 id="sources"><font color=#669900><em>Sources</em></font></h3>
+<p>Full source code of the scripts you can find on my <a href="https://github.com/igbt6/Packt-Publishing-Free-Learning">github profile</a>. You can find there also full setup steps that are required to make scripts work.
+Project sonsits of 3 main files:</p>
+<ul>
+<li><em>grabPacktFreeBook.py</em></li>
+<li><em>packtFreeBookDownloader.py</em></li>
+<li><em>configFile.cfg</em></li>
+</ul>
+<p>Script <code>grabPacktFreeBook.py</code> is responsible for logging onto your account and claiming the daily ebook (adding it to <a href="https://www.packtpub.com/account/my-ebooks">your ebooks list</a>.
+First step is to read all configuration parameters from <em>configFile.cfg</em> such as your account email and password </p>
+<div class="highlight"><pre><span></span>    <span class="n">config</span> <span class="o">=</span><span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>    
+    <span class="k">try</span><span class="p">:</span>        
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;configFile.cfg&quot;</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">configparser</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s1">&#39;config file not found&#39;</span><span class="p">)</span>       
+        <span class="n">email</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGIN_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
+        <span class="n">password</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGIN_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+        <span class="n">downloadBooksAfterClaim</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DOWNLOAD_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;downloadBookAfterClaim&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">configparser</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;[ERROR] loginData.cfg file incorrect or doesn&#39;t exist! : &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+
+
+<p>If variable <code>downloadBooksAfterClaim</code> contains "YES" string, it enables automatic download of the claimed ebook.
+Most interesting part of the sript are HTTP REST requests being sent to <em>packtpub.com</em> server. They are:
+<em> POST request - to login into server
+</em> GET - to claim a free daily ebook.
+For this purpose I have used an excellent python library <a href="http://docs.python-requests.org/en/master/"><em>requests</em></a>. It is one of the best python libraries that allows you to send HTTP requests in an easy and fancy way, without need for doing many manual and boring job. 
+To form up a correct login POST request, we need to take a look on a body of an "original" post request that is sent by packtpub website while logging. The simplest way to check this is a built-in developer tool which you can find in most of modern webrowsers. I have used a firefox one. Just press F12 key and you can sniff all packets being sent to and back by webbrowser.
+To observe a network traffic during login attempt, go to <a href="https://www.packtpub.com/">https://www.packtpub.com/</a> and click on login button located at right corner of the website. You should see a prompt window like shown below:
+<img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-prompt.png" width="100%">
+Now it's time to open network traffic debugger in your webbrowser, in Firefox press the F12 key as i mentioned before. Click <em>Network</em> label and you can choose <em>All</em> types of sources to be sniffed. Clean console before by clicking on <em>bin icon</em>. Type down your correct login data into login prompt fields and send all to the server by pressing the login button. When all went correctly what means you are correctly logged into your account, choose first POST method from console logs, and now you are to extarct some useful information that will let you build correct POST request to be used in our script.</p>
+<p>!!! paste here 2 photos!
+As you probably noticed we have got all the informations we need to add to our POST request to make it valid.    </p>
+<p>TO BE DONE soon! </p>
             </div>
             <!-- /.entry-content -->
     <hr/>
