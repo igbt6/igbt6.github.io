@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>PacktPublishing free eBook grabber - Lukasz makes stuff</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link href="../images/logo.png" rel="icon">
+
+<link rel="canonical" href="../blog/packtpublishing-free-ebook-grabber.html">
+
+        <meta name="author" content="lukasz uszko" />
+        <meta name="description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. What is it for? Packt Publishing offers its customers a free ebook everyday. To claim the book, first you have ..." />
+
+        <meta property="og:site_name" content="Lukasz makes stuff" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="PacktPublishing free eBook grabber"/>
+        <meta property="og:url" content="../blog/packtpublishing-free-ebook-grabber.html"/>
+        <meta property="og:description" content="Hello reader! Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. What is it for? Packt Publishing offers its customers a free ebook everyday. To claim the book, first you have ..."/>
+        <meta property="article:published_time" content="2016-07-20" />
+            <meta property="article:section" content="Python" />
+            <meta property="article:author" content="lukasz uszko" />
+
+    <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@igbt6">
+        <meta name="twitter:creator" content="@igbt6">
+    <meta name="twitter:domain" content="..">
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="../theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../theme/css/pygments/monokai.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+        <link href="../static/custom.css" rel="stylesheet">
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">
+Lukasz makes stuff            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                         <li><a href="../about.html">
+                             About
+                          </a></li>
+                         <li><a href="../projects.html">
+                             Projects
+                          </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="../blog/packtpublishing-free-ebook-grabber.html"
+                       rel="bookmark"
+                       title="Permalink to PacktPublishing free eBook grabber">
+                        PacktPublishing free eBook grabber
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-07-20T21:56:00+02:00"> śro 20 lipiec 2016</time>
+    </span>
+
+
+
+        <span class="label label-default">Category</span>
+        <a href="../category/python.html">Python</a>
+
+
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>Hello reader!</p>
+<p>Today, I am going to show you how to create a simple python script which will automatize your job with claiming daily free ebook offered by Packt Publishing. </p>
+<h3 id="what-is-it-for"><font color=#669900><em>What is it for?</em></font></h3>
+<p><a href="https://www.packtpub.com">Packt Publishing</a> offers its customers a free ebook everyday. 
+To claim the book, first you have to create a personal packtpub account <a href="https://www.packtpub.com/register">here</a>. After this you can claim everyday a new IT technical ebook from <a href="https://www.packtpub.com/packt/offers/free-learning">here</a>. It requires to repeat many manual steps in order to claim and then download an ebook. Of course it takes time and it will probably cause you miss a valuable position finally. That's why i created a simple 2 scripts, that automatically claim and download a daily free eBook in chosen format/s.</p>
+<h3 id="login-and-claiming-a-book"><font color=#669900><em>Login and claiming a book</em></font></h3>
+<p>Full source code of the scripts you can find on my <a href="https://github.com/igbt6/Packt-Publishing-Free-Learning">github profile</a>. You can find there also full setup steps that are required to make scripts work.
+Project sonsits of 3 main files:</p>
+<ul>
+<li><em>grabPacktFreeBook.py</em></li>
+<li><em>packtFreeBookDownloader.py</em></li>
+<li><em>configFile.cfg</em></li>
+</ul>
+<p>Script <code>grabPacktFreeBook.py</code> is responsible for logging onto your account and claiming the daily ebook (adding it to <a href="https://www.packtpub.com/account/my-ebooks">your ebooks list</a>.
+First step is to read all configuration parameters from <em>configFile.cfg</em> such as your account email and password:</p>
+<div class="highlight"><pre><span></span>    <span class="n">config</span> <span class="o">=</span><span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>    
+    <span class="k">try</span><span class="p">:</span>        
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;configFile.cfg&quot;</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">configparser</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s1">&#39;config file not found&#39;</span><span class="p">)</span>       
+        <span class="n">email</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGIN_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
+        <span class="n">password</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGIN_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+        <span class="n">downloadBooksAfterClaim</span><span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DOWNLOAD_DATA&quot;</span><span class="p">,</span><span class="s1">&#39;downloadBookAfterClaim&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">configparser</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;[ERROR] loginData.cfg file incorrect or doesn&#39;t exist! : &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+
+
+<p>If variable <code>downloadBooksAfterClaim</code> contains "YES" string, it enables automatic download of the claimed ebook.
+Most interesting part of the sript are HTTP REST requests being sent to <em>packtpub.com</em> server. They are:</p>
+<ul>
+<li>POST request - to login into server</li>
+<li>GET - to claim a free daily ebook.</li>
+</ul>
+<p>For this purpose I have used an excellent python library <a href="http://docs.python-requests.org/en/master/"><em>requests</em></a>. It is one of the best python libraries that allows you to send HTTP requests in an easy and fancy way, without need for doing many manual and boring job. 
+To form up a correct login POST request, we need to take a look on a body of an "original" post request that is sent by packtpub website while logging. The simplest way to check this is a built-in developer tool which you can find in most of modern webrowsers. I have used a firefox one. Just press F12 key and you can sniff all packets being sent to and back by webbrowser.
+To observe a network traffic during login attempt, go to <a href="https://www.packtpub.com/">https://www.packtpub.com/</a> and click on login button located at right corner of the website. You should see a prompt window like this one below:</p>
+<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-prompt.png" width="100%" height="90%">
+<font size="2">img. login prompt</font></p>
+<p>Now it's time to open network traffic debugger in your webbrowser. In Firefox, press the F12 key as i mentioned before. Click <em>Network</em> label and you can choose <em>All</em> types of sources to be sniffed. Clean console before by clicking on <em>bin icon</em>. Type down your correct login data into login prompt fields and send all to the server by pressing the login button. When all went correctly what means you are correctly logged into your account, choose first POST method from console logs, and now you are to extarct some useful information that will let you build correct POST request to be used in our script.</p>
+<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-headers.png" width="100%" height="90%">
+<font size="2">img. POST login request - headers data</font></p>
+<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-params.png" width="100%" height="90%">
+<font size="2">img. POST login request - parameters data</font></p>
+<p>I bet, a body of HTTP requests is known for you. I you are not familiar with it yet, take a look <a href="http://www.tutorialspoint.com/http/http_overview.htm">here</a> before further reading.</p>
+<div class="highlight"><pre><span></span>    <span class="n">freeLearningUrl</span><span class="o">=</span> <span class="s2">&quot;https://www.packtpub.com/packt/offers/free-learning&quot;</span>
+    <span class="n">packtpubUrl</span><span class="o">=</span> <span class="s1">&#39;https://www.packtpub.com&#39;</span>
+    <span class="n">reqHeaders</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span><span class="s1">&#39;application/x-www-form-urlencoded&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;Connection&#39;</span><span class="p">:</span><span class="s1">&#39;keep-alive&#39;</span><span class="p">}</span>
+    <span class="n">formData</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;email&#39;</span><span class="p">:</span><span class="n">email</span><span class="p">,</span>
+                <span class="s1">&#39;password&#39;</span><span class="p">:</span><span class="n">password</span><span class="p">,</span>
+                <span class="s1">&#39;op&#39;</span><span class="p">:</span><span class="s1">&#39;Login&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;form_build_id&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;form_id&#39;</span><span class="p">:</span><span class="s1">&#39;packt_user_login_form&#39;</span><span class="p">}</span>
+</pre></div>
+
+
+<p>The above snippet contains two <em>directory</em> structures that describes <em>headers</em> and <em>data</em> fields of the login POST request. In order to retrieve <em>form_build_id</em> we have to extract it from html sources of the page under <em>freeLearningUrl</em> as shown below:</p>
+<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login_id.png" width="100%" height="90%">
+<font size="2">img. form_build_id - extracting data from html source</font></p>
+<p>The small piece of the scricpt below does this job. First we get thhe webpage sources with GET request. Once we have go a full source of the page, there appears another great python library named <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/"><em>Beautiful Soup</em></a>. Its main task is to pull data out from HTML and XML files. Analyzing the code you can see how much it makes your job easier. Besides <em>form_build_id</em>, i also extracted <em>bookTitle</em> and <em>claimUrl</em> which will be used later. </p>
+<div class="highlight"><pre><span></span>        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">freeLearningUrl</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">is</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="n">html</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+            <span class="n">loginBuildId</span><span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;form_build_id&#39;</span><span class="p">})[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">claimUrl</span><span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span><span class="s1">&#39;twelve-days-claim&#39;</span><span class="p">})[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
+            <span class="n">bookTitle</span><span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span><span class="s1">&#39;dotd-title&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">next_element</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">loginBuildId</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">claimUrl</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">bookTitle</span> <span class="ow">is</span> <span class="bp">None</span> <span class="p">):</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;[ERROR] - cannot get login data&quot;</span> <span class="p">)</span> 
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                
+        <span class="k">else</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">(</span><span class="s2">&quot;http GET status codec != 200&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>We have already gathered all the data to login, claim the book and store it's under given name. Login and claiming the free ebook are being perforemd here:</p>
+<div class="highlight"><pre><span></span>    <span class="n">rPost</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">freeLearningUrl</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">reqHeaders</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">formData</span><span class="p">)</span> <span class="c1">#login into packtpub account</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">packtpubUrl</span><span class="o">+</span><span class="n">claimUrl</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#claim ebook</span>
+</pre></div>
+
+
+<h3 id="downloading-the-claimed-ebook"><font color=#669900><em>Downloading the claimed ebook</em></font></h3>
+<p>If all has gone well (we got correct HTTP request reponse codes), it's time to download the claimed free ebook on your computer.
+Parameters of the download are clearly described in [DOWNLOAD_DATA] field of <code>configFile.cfg</code>.</p>
+<div class="highlight"><pre><span></span><span class="k">[DOWNLOAD_DATA]</span>
+<span class="err">downloadFolderPath:</span> <span class="err">C:\Users\me\Desktop\myEbooksFromPackt</span>
+<span class="err">downloadBookAfterClaim:</span> <span class="err">YES</span>
+<span class="err">downloadFormats:</span> <span class="err">pdf,</span> <span class="err">epub,</span> <span class="err">mobi,</span> <span class="err">code</span>
+<span class="c1">;downloadBookTitles: Unity 4.x Game AI Programming , Multithreading in C# 5.0 Cookbook</span>
+</pre></div>
+
+
+<p>The script that makes the job <code>packtFreeBookDownloader.py</code>
+When the field <em>downloadBookAfterClaim</em> is set to YES value, after claiming a book, the ebook will be automatically downloaded in chosen formats on your machine what you can find in this code snippet:</p>
+<div class="highlight"><pre><span></span>        <span class="k">if</span> <span class="n">downloadBooksAfterClaim</span><span class="o">==</span><span class="s2">&quot;YES&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">packtFreeBookDownloader</span> <span class="kn">import</span> <span class="n">MyPacktPublishingBooksDownloader</span>
+            <span class="n">downloader</span> <span class="o">=</span> <span class="n">MyPacktPublishingBooksDownloader</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+            <span class="n">downloader</span><span class="o">.</span><span class="n">getDataOfAllMyBooks</span><span class="p">()</span>
+        <span class="n">downloader</span><span class="o">.</span><span class="n">downloadBooks</span><span class="p">([</span><span class="n">bookTitle</span><span class="p">],</span> <span class="n">downloader</span><span class="o">.</span><span class="n">downloadFormats</span><span class="p">)</span> 
+</pre></div>
+
+
+<p>You can also use the script separately to download all or chosen titles of the ebooks from your account:</p>
+<ul>
+<li>to downlaod all books the field: <em>downloadBookTitles</em> shall be commented out like shown above;</li>
+<li>to download chosen titles from your account put them into <em>downloadBookTitles</em> separated by commas.</li>
+</ul>
+<p>Go through the source code of <code>packtFreeBookDownloader.py</code> script to see how it's all implemented.</p>
+<h3 id="usage"><font color=#669900><em>Usage</em></font></h3>
+<p>To make the scripts running daily in autoamtic way, the good idea is to setup a task that will do this jobe for us. I'll show a usage of CRON tool on Ubuntu OS and SCHTASKS for Windows wshich seems proper for this type of tasks.</p>
+<p><strong>UBUNTU</strong> (tested on 16.04):</p>
+<p>modify access permissions of the script:</p>
+<div class="highlight"><pre><span></span>  chmod a+x grabPacktFreeBook.py 
+</pre></div>
+
+
+<p><em>CRON</em> setup (more: https://help.ubuntu.com/community/CronHowto) :</p>
+<div class="highlight"><pre><span></span>  sudo crontab -e
+</pre></div>
+
+
+<p>paste (modify all paths correctly according to your setup):</p>
+<div class="highlight"><pre><span></span>  <span class="m">0</span> <span class="m">12</span> * * * <span class="nb">cd</span> /home/me/Desktop/PacktScripts/ <span class="o">&amp;&amp;</span> /usr/bin/python3 grabPacktFreeBook.py &gt; /home/me/Desktop/PacktScripts/grabPacktFreeBook.log 2&gt;<span class="p">&amp;</span>1
+</pre></div>
+
+
+<p>and save the crontab file. To verify if CRON fires up the script correctly, run a command:</p>
+<div class="highlight"><pre><span></span>  sudo grep CRON /var/log/syslog
+</pre></div>
+
+
+<p><strong>WINDOWS</strong> (tested on win7):</p>
+<p><em>schtasks.exe</em> setup (more info: https://technet.microsoft.com/en-us/library/cc725744.aspx) :</p>
+<p>To create the task that will be called at 12:00 everyday, run the following command in <em>cmd</em> (modify all paths according to your setup):</p>
+<div class="highlight"><pre><span></span>  schtasks /create /sc DAILY /tn <span class="s2">&quot;grabEbookFromPacktTask&quot;</span> /tr <span class="s2">&quot;C:\Users\me\Desktop\GrabPacktFreeBook\grabEbookFromPacktTask.bat&quot;</span> /st 12:00
+</pre></div>
+
+
+<p>To check if the "grabEbookFromPacktTask" has been added to all scheduled tasks on your computer:</p>
+<div class="highlight"><pre><span></span>  schtasks /query
+</pre></div>
+
+
+<p>To run the task manually:</p>
+<div class="highlight"><pre><span></span>  schtasks /run /tn <span class="s2">&quot;grabEbookFromPacktTask&quot;</span>
+</pre></div>
+
+
+<p>To delete the task:</p>
+<div class="highlight"><pre><span></span>  schtasks /delete /tn <span class="s2">&quot;grabEbookFromPacktTask&quot;</span>
+</pre></div>
+
+
+<h3 id="requirements"><font color=#669900><em>Requirements</em></font></h3>
+<p>To use the scripts I have to mention about requirements yet.</p>
+<p>Before using You need to have already installed either Python 2.x or 3.x on your machine. Install <em>pip</em> (if you have not installed it yet).
+To do that download:  <a href="https://bootstrap.pypa.io/get-pip.py">https://bootstrap.pypa.io/get-pip.py</a>, then run the following command:</p>
+<div class="highlight"><pre><span></span>  python get-pip.py
+</pre></div>
+
+
+<p>Once pip has been installed, run the following:</p>
+<div class="highlight"><pre><span></span>  pip install requests
+  pip install beautifulsoup4
+</pre></div>
+
+
+<p>If you use Python 2.x :</p>
+<div class="highlight"><pre><span></span>pip install future
+</pre></div>
+
+
+<p>Finally change your login credentials in <code>configFile.cfg</code> file. That's all!    </p>
+<h3 id="summary"><font color=#669900><em>Summary</em></font></h3>
+<p>In this post i wanted show you how easily you can automatize your job using python language. I hope that materials and code provided here motivate you to build scripts, scrappers, web bots or any other programs that will help you to save some time : ) Feel free to comment or ask any questions below!</p>
+<p>Łukasz  </p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'igbt6'; // required: replace example with your forum shortname
+
+                var disqus_url = 'http://lukaszmakesstuff.com/blog/packtpublishing-free-ebook-grabber.html';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://twitter.com/igbt6"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
+                <li class="list-group-item"><a href="http://www.linkedin.com/in/łukasz-uszko-75368b97"><i class="fa fa-linkedin-square fa-lg"></i> linkedin</a></li>
+                <li class="list-group-item"><a href="http://github.com/igbt6"><i class="fa fa-github-square fa-lg"></i> github</a></li>
+              </ul>
+            </li>
+
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+                <ul class="list-group" id="recentposts">
+                    <li class="list-group-item">
+                        <a href="../blog/packtpublishing-free-ebook-grabber.html">
+                            PacktPublishing free eBook grabber
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="../blog/how-to-setup-pelican-blog.html">
+                            How to setup Pelican blog
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="../blog/welcome-post.html">
+                            Welcome post
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 lukasz uszko
+            &middot; Powered by
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="../theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="../theme/js/respond.min.js"></script>
+
+    <script src="../theme/js/bodypadding.js"></script>
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'igbt6'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+</body>
+</html>
