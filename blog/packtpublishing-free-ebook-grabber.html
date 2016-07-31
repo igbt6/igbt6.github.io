@@ -142,13 +142,42 @@ Most interesting part of the sript are HTTP REST requests being sent to <em>pack
 <p>For this purpose I have used an excellent python library <a href="http://docs.python-requests.org/en/master/"><em>requests</em></a>. It is one of the best python libraries that allows you to send HTTP requests in an easy and fancy way, without need for doing many manual and boring job. 
 To form up a correct login POST request, we need to take a look on a body of an "original" post request that is sent by packtpub website while logging. The simplest way to check this is a built-in developer tool which you can find in most of modern webrowsers. I have used a firefox one. Just press F12 key and you can sniff all packets being sent to and back by webbrowser.
 To observe a network traffic during login attempt, go to <a href="https://www.packtpub.com/">https://www.packtpub.com/</a> and click on login button located at right corner of the website. You should see a prompt window like this one below:</p>
-<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-prompt.png" width="100%" height="90%">
-<font size="2">img. login prompt</font></p>
+<figure>
+<img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-prompt.png" width="90%" height="70%">
+<figcaption>
+<font size="2">Fig.1 login prompt</font>
+</figcaption>
+</figure>
+
+<p></p>
+
+<p></p>
+
 <p>Now it's time to open network traffic debugger in your webbrowser. In Firefox, press the F12 key as i mentioned before. Click <em>Network</em> label and you can choose <em>All</em> types of sources to be sniffed. Clean console before by clicking on <em>bin icon</em>. Type down your correct login data into login prompt fields and send all to the server by pressing the login button. When all went correctly what means you are correctly logged into your account, choose first POST method from console logs, and now you are to extarct some useful information that will let you build correct POST request to be used in our script.</p>
-<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-headers.png" width="100%" height="90%">
-<font size="2">img. POST login request - headers data</font></p>
-<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-params.png" width="100%" height="90%">
-<font size="2">img. POST login request - parameters data</font></p>
+<figure>
+<img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-headers.png" width="100%" height="90%">
+<figcaption>
+<font size="2">Fig.2 POST login request - headers data</font>
+</figcaption>
+</figure>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<figure>
+<img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login-params.png" width="100%" height="90%">
+<figcaption>
+<font size="2">Fig.3 POST login request - parameters data</font>
+</figcaption>
+</figure>
+
+<p></p>
+
 <p>I bet, a body of HTTP requests is known for you. I you are not familiar with it yet, take a look <a href="http://www.tutorialspoint.com/http/http_overview.htm">here</a> before further reading.</p>
 <div class="highlight"><pre><span></span>    <span class="n">freeLearningUrl</span><span class="o">=</span> <span class="s2">&quot;https://www.packtpub.com/packt/offers/free-learning&quot;</span>
     <span class="n">packtpubUrl</span><span class="o">=</span> <span class="s1">&#39;https://www.packtpub.com&#39;</span>
@@ -162,9 +191,13 @@ To observe a network traffic during login attempt, go to <a href="https://www.pa
 </pre></div>
 
 
-<p>The above snippet contains two <em>directory</em> structures that describes <em>headers</em> and <em>data</em> fields of the login POST request. In order to retrieve <em>form_build_id</em> we have to extract it from html sources of the page under <em>freeLearningUrl</em> as shown below:</p>
-<p><img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login_id.png" width="100%" height="90%">
-<font size="2">img. form_build_id - extracting data from html source</font></p>
+<p>The above snippet contains two <em>directory</em> structures that describes <em>headers</em> and <em>data</em> fields of the login POST request. In order to retrieve <em>form_build_id</em> we have to extract it from html sources of the page under <em>freeLearningUrl</em> as shown below:
+<figure>
+    <img src="/static/20160720-packtpub-free-ebook-grabber/20160720-packtpub-free-ebook-grabber-login_id.png" width="90%" height="80%">
+    <figcaption>
+        <font size="2" >Fig.4 form_build_id-extracting data from html source</font>
+    </figcaption>
+</figure></p>
 <p>The small piece of the scricpt below does this job. First we get thhe webpage sources with GET request. Once we have go a full source of the page, there appears another great python library named <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/"><em>Beautiful Soup</em></a>. Its main task is to pull data out from HTML and XML files. Analyzing the code you can see how much it makes your job easier. Besides <em>form_build_id</em>, i also extracted <em>bookTitle</em> and <em>claimUrl</em> which will be used later. </p>
 <div class="highlight"><pre><span></span>        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">freeLearningUrl</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
         <span class="k">if</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">is</span> <span class="mi">200</span><span class="p">):</span>
